@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مراجعة: المسار الكامل (١-١٦) — مسار هندسة الرؤية الحاسوبية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;700;800&family=Readex+Pro:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #14110F;
+    --surface: #1E1A16;
+    --line: #3A342C;
+    --ink: #F2ECE3;
+    --ink-dim: #9C9284;
+    --amber: #E08A3C;
+    --teal: #4FA8A0;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Readex Pro', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .display { font-family: 'Tajawal', sans-serif; }
+  .mono { font-family: 'IBM Plex Mono', monospace; direction: ltr; unicode-bidi: isolate; }
+
+  a { color: inherit; }
+
+  /* ===== grid backdrop ===== */
+  .grid-field {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 34px 34px;
+    opacity: .35;
+    mask-image: radial-gradient(ellipse at 70% 20%, black 10%, transparent 70%);
+  }
+
+  /* ===== hero ===== */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding: 64px 24px 48px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .hero-inner {
+    position: relative;
+    max-width: 880px;
+    margin: 0 auto;
+  }
+
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    direction: ltr;
+    display: inline-block;
+    font-size: 12px;
+    letter-spacing: .12em;
+    color: var(--amber);
+    border: 1px solid var(--amber);
+    border-radius: 3px;
+    padding: 3px 9px;
+    margin-bottom: 22px;
+  }
+
+  .hero h1 {
+    font-size: clamp(30px, 5vw, 46px);
+    line-height: 1.35;
+    font-weight: 800;
+    margin: 0 0 18px;
+  }
+
+  .hero p.thesis {
+    font-size: 17px;
+    line-height: 1.9;
+    color: var(--ink-dim);
+    max-width: 620px;
+    margin: 0 0 40px;
+  }
+
+  .scanline {
+    position: absolute;
+    left: -10%;
+    right: -10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--amber) 45%, transparent);
+    opacity: .7;
+    animation: sweep 6s linear infinite;
+  }
+
+  @keyframes sweep {
+    0%   { top: 8%; }
+    50%  { top: 92%; }
+    100% { top: 8%; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scanline { animation: none; top: 50%; }
+  }
+
+  /* progress track: 16 weeks */
+  .track {
+    display: flex;
+    gap: 5px;
+    align-items: flex-end;
+    height: 34px;
+  }
+
+  .tick {
+    flex: 1;
+    height: 12px;
+    background: var(--line);
+    border-radius: 2px;
+    position: relative;
+  }
+
+  .tick.done {
+    height: 26px;
+    background: var(--amber);
+  }
+
+  .tick.now {
+    height: 34px;
+    background: var(--teal);
+  }
+
+  .track-label {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    direction: ltr;
+    font-size: 12px;
+    color: var(--ink-dim);
+  }
+
+  /* ===== sections ===== */
+  section { max-width: 880px; margin: 0 auto; padding: 56px 24px; }
+
+  .section-head { margin-bottom: 28px; }
+
+  .section-head .kicker {
+    font-family: 'IBM Plex Mono', monospace;
+    direction: ltr;
+    font-size: 12px;
+    color: var(--teal);
+    letter-spacing: .1em;
+    margin-bottom: 8px;
+  }
+
+  .section-head h2 {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    margin: 0 0 10px;
+  }
+
+  .section-head p {
+    color: var(--ink-dim);
+    font-size: 15px;
+    line-height: 1.8;
+    max-width: 600px;
+    margin: 0;
+  }
+
+  /* ===== chart ===== */
+  .chart-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 28px 24px 20px;
+  }
+
+  .chart-legend {
+    display: flex;
+    gap: 22px;
+    margin-bottom: 26px;
+    font-size: 13px;
+    color: var(--ink-dim);
+  }
+
+  .chart-legend span { display: inline-flex; align-items: center; gap: 7px; }
+
+  .dot { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
+  .dot.amber { background: var(--amber); }
+  .dot.teal { background: var(--teal); }
+
+  .chart {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 150px;
+    border-bottom: 1px solid var(--line);
+    padding: 0 6px;
+  }
+
+  .chart-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 7.3%;
+  }
+
+  .bars {
+    display: flex;
+    gap: 5px;
+    align-items: flex-end;
+    height: 130px;
+  }
+
+  .bar { width: 9px; border-radius: 3px 3px 1px 1px; min-height: 4px; }
+  .bar.amber { background: var(--amber); }
+  .bar.teal { background: var(--teal); }
+
+  .chart-col .wk {
+    font-family: 'IBM Plex Mono', monospace;
+    direction: ltr;
+    font-size: 12px;
+    color: var(--ink-dim);
+  }
+
+  .chart-note {
+    margin-top: 20px;
+    font-size: 14px;
+    line-height: 1.85;
+    color: var(--ink-dim);
+  }
+
+  /* ===== timeline cards ===== */
+  .weeks { display: flex; flex-direction: column; gap: 18px; }
+
+  .wcard {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 26px 26px 22px;
+  }
+
+  .wcard::before, .wcard::after,
+  .wcard .br-tl, .wcard .br-br {
+    content: "";
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--amber);
+    opacity: .8;
+  }
+
+  .wcard::before { top: -1px; right: -1px; border-left: none; border-bottom: none; }
+  .wcard::after  { bottom: -1px; left: -1px; border-right: none; border-top: none; }
+
+  .wcard-top {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+
+  .wnum {
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    color: var(--amber);
+  }
+
+  .wtitle {
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 700;
+    font-size: 19px;
+  }
+
+  .wcard p.body-text {
+    font-size: 15px;
+    line-height: 1.95;
+    color: var(--ink-dim);
+    margin: 0 0 16px;
+  }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 16px; }
+
+  .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    direction: ltr;
+    font-size: 11.5px;
+    color: var(--ink-dim);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 3px 8px;
+  }
+
+  .wmetrics {
+    display: flex;
+    gap: 22px;
+    font-family: 'IBM Plex Mono', monospace;
+    direction: ltr;
+    font-size: 12.5px;
+    color: var(--ink-dim);
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+  }
+
+  .wmetrics b { color: var(--ink); font-weight: 500; }
+
+  /* ===== closing ===== */
+  .closing {
+    border-top: 1px solid var(--line);
+    padding: 56px 24px 64px;
+  }
+
+  .closing-inner {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .closing p {
+    font-size: 16px;
+    line-height: 2;
+    color: var(--ink-dim);
+    margin: 0 0 14px;
+  }
+
+  .closing p:last-child { color: var(--ink); }
+
+  @media (max-width: 640px) {
+    .track { gap: 3px; }
+    .chart-col { width: auto; }
+    .bar { width: 11px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="grid-field"></div>
+  <div class="scanline"></div>
+  <div class="hero-inner">
+    <span class="eyebrow">CV-ENGINEER-PATH / FINAL REVIEW</span>
+    <h1 class="display">مراجعة المسار الكامل — الأسابيع ١ إلى ١٦</h1>
+    <p class="thesis">
+      ستة عشر أسبوعًا، من أول سطر قراءة صورة بـ OpenCV إلى نموذج YOLOv8 مُدرَّب على GPU ومسابقة
+      Kaggle منشورة بنتيجة حقيقية. هذي مو قائمة إنجازات،
+      هذي قراءة صادقة لوين صار التقدم فعلي، ووين كان بطيء، ومتى تحوّل التعلّم من اتباع خطوات
+      إلى تشخيص مستقل لمشاكل حقيقية.
+    </p>
+    <div class="track">
+      <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+      <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+      <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+      <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+      <div class="tick done"></div><div class="tick done"></div><div class="tick done"></div>
+      <div class="tick now"></div>
+    </div>
+    <div class="track-label"><span>WEEK 01</span><span>WEEK 16 — COMPLETE</span></div>
+  </div>
+</div>
+
+<section>
+  <div class="section-head">
+    <div class="kicker">SIGNAL</div>
+    <h2 class="display">وين كان العطل فعليًا — عبر المسار كامل</h2>
+    <p>مو كل أسبوع اتعثر بنفس النوع. الأسبوعين الأولين كان العطل ببيئة العمل (مسارات، Git، تسمية ملفات)، واختفى تقريبًا بعدها. رجع يظهر بقوة بس عند دخول أدوات جديدة كليًا بنهاية المسار (Colab، Kaggle) — نمط طبيعي، مو تراجع.</p>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-legend">
+      <span><i class="dot amber"></i> أعطال بيئة العمل</span>
+      <span><i class="dot teal"></i> تصحيحات مفاهيمية</span>
+    </div>
+    <div class="chart">
+      <div class="chart-col">
+        <div class="bars"><div class="bar amber" style="height:87px"></div><div class="bar teal" style="height:29px"></div></div>
+        <span class="wk">W1</span>
+      </div>
+      <div class="chart-col">
+        <div class="bars"><div class="bar amber" style="height:29px"></div><div class="bar teal" style="height:58px"></div></div>
+        <span class="wk">W2</span>
+      </div>
+      <div class="chart-col">
+        <div class="bars"><div class="bar amber" style="height:4px"></div><div class="bar teal" style="height:14px"></div></div>
+        <span class="wk">W3</span>
+      </div>
+      <div class="chart-col">
+        <div class="bars"><div class="bar amber" style="height:4px"></div><div class="bar teal" style="height:29px"></div></div>
+        <span class="wk">W4</span>
+      </div>
+      <div class="chart-col">
+        <div class="bars"><div class="bar amber" style="height:14px"></div><div class="bar teal" style="height:4px"></div></div>
+        <span class="wk">W5</span>
+      </div>
+      <div class="chart-col">
+        <div class="bars"><div class="bar amber" style="height:4px"></div><div class="bar teal" style="height:29px"></div></div>
+        <span class="wk">W6</span>
+      </div>
+      <div class="chart-col">
+        <div class="bars"><div class="bar amber" style="height:87px"></div><div class="bar teal" style="height:14px"></div></div>
+        <span class="wk">W7</span>
+      </div>
+      <div class="chart-col">
+        <div class="bars"><div class="bar amber" style="height:4px"></div><div class="bar teal" style="height:43px"></div></div>
+        <span class="wk">W8-9</span>
+      </div>
+      <div class="chart-col">
+        <div class="bars"><div class="bar amber" style="height:14px"></div><div class="bar teal" style="height:43px"></div></div>
+        <span class="wk">W10-11</span>
+      </div>
+      <div class="chart-col">
+        <div class="bars"><div class="bar amber" style="height:4px"></div><div class="bar teal" style="height:14px"></div></div>
+        <span class="wk">W12</span>
+      </div>
+      <div class="chart-col">
+        <div class="bars"><div class="bar amber" style="height:101px"></div><div class="bar teal" style="height:14px"></div></div>
+        <span class="wk">W13-14</span>
+      </div>
+      <div class="chart-col">
+        <div class="bars"><div class="bar amber" style="height:116px"></div><div class="bar teal" style="height:4px"></div></div>
+        <span class="wk">W15</span>
+      </div>
+      <div class="chart-col">
+        <div class="bars"><div class="bar amber" style="height:14px"></div><div class="bar teal" style="height:29px"></div></div>
+        <span class="wk">W16</span>
+      </div>
+    </div>
+    <p class="chart-note">
+      العدد يمثل مرات حقيقية سُجّلت بتقارير كل أسبوع. أعطال بيئة العمل اختفت بعد الأسبوع الثالث تقريبًا،
+      ثم عادت للظهور بقوة عند الانتقال لأدوات جديدة كليًا (Colab، Kaggle، Google Drive بالأسابيع 13-15) —
+      نمط متوقع عند تعلّم أي أداة جديدة، لا تراجع بالقدرة التقنية. التصحيحات المفاهيمية ارتفعت بالأسبوع
+      الثاني ثم انخفضت بثبات نسبي حتى نهاية المسار، مع طفرة أخيرة بسيطة بالأسبوع 16 (دقة المصطلحات
+      بالمحتوى التوظيفي — درس مختلف تمامًا عن بقية المسار).
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="section-head">
+    <div class="kicker">TIMELINE — FULL PATH</div>
+    <h2 class="display">أسبوع بأسبوع، من البداية للنهاية</h2>
+    <p>ملخص كل أسبوع بجملتين أو ثلاث، بدون تضخيم. الأرقام بالأسفل من نفس تقارير كل أسبوع.</p>
+  </div>
+
+  <div class="weeks">
+
+    <div class="wcard">
+      <div class="wcard-top">
+        <span class="wnum">01</span>
+        <span class="wtitle">الأساسيات الصورية</span>
+      </div>
+      <p class="body-text">
+        أخذ وقت أطول من المخطط، مو لأن المفاهيم صعبة، لأن بيئة العمل كانت فوضى: مسار فيه حروف عربية
+        عطّل قراءة الصورة، ملف اسمه نفس اسم مكتبة، ومجلد Git تعشش داخل نفسه. المفاهيم نفسها
+        (Threshold، Erosion، Dilation) اتفهمت بعد تعثر حقيقي، مو حفظ.
+      </p>
+      <div class="tags">
+        <span class="tag">Grayscale</span><span class="tag">Sobel/Canny</span>
+        <span class="tag">Threshold</span><span class="tag">Morphology</span><span class="tag">Git</span>
+      </div>
+      <div class="wmetrics">
+        <span>ENV FIXES <b>6</b></span>
+        <span>CONCEPT FIXES <b>2</b></span>
+      </div>
+    </div>
+
+    <div class="wcard">
+      <div class="wcard-top">
+        <span class="wnum">02</span>
+        <span class="wtitle">الفلاتر والتحويلات الهندسية</span>
+      </div>
+      <p class="body-text">
+        هنا صار أوضح خلل بالأسبوعين: عكس اتجاه القياس الأساسي للبكسل (0 أسود، 255 أبيض)
+        ثلاث مرات متتالية. مو خطأ كبير بحد ذاته، لكنه كشف عادة الإجابة السريعة قبل التفكير.
+        بعد ما ثبت المقياس، الأسبوع مشى بثبات لين النهاية.
+      </p>
+      <div class="tags">
+        <span class="tag">Convolution</span><span class="tag">Blur/Sharpen</span>
+        <span class="tag">Rotation</span><span class="tag">ROI Pipeline</span>
+      </div>
+      <div class="wmetrics">
+        <span>ENV FIXES <b>2</b></span>
+        <span>CONCEPT FIXES <b>4</b></span>
+      </div>
+    </div>
+
+    <div class="wcard">
+      <div class="wcard-top">
+        <span class="wnum">03</span>
+        <span class="wtitle">إتمام OpenCV</span>
+      </div>
+      <p class="body-text">
+        أفضل أسبوع لين الآن. ولا عطل واحد ببيئة العمل، والإجابات على أسئلة تحليلية
+        (ليش CLAHE أفضل من Threshold العام هنا مو هناك) بانت مبنية على ربط منطقي، مو تخمين.
+      </p>
+      <div class="tags">
+        <span class="tag">Contours</span><span class="tag">HSV</span><span class="tag">CLAHE</span>
+      </div>
+      <div class="wmetrics">
+        <span>ENV FIXES <b>0</b></span>
+        <span>CONCEPT FIXES <b>1</b></span>
+      </div>
+    </div>
+
+    <div class="wcard">
+      <div class="wcard-top">
+        <span class="wnum">04</span>
+        <span class="wtitle">الشبكات العصبية — NumPy بدون PyTorch</span>
+      </div>
+      <p class="body-text">
+        أول أسبوع من مرحلة التعلّم العميق، وبُني بالكامل بـ NumPy عمدًا، عشان الشبكة
+        تتفهم رياضيًا قبل ما تصير صندوق أسود. مشكلة XOR وضحت ليش نحتاج طبقة مخفية أصلًا —
+        نيورون واحد فشل يفصلها.
+      </p>
+      <div class="tags">
+        <span class="tag">Forward Prop</span><span class="tag">Backprop</span>
+        <span class="tag">Gradient Descent</span><span class="tag">XOR</span>
+      </div>
+      <div class="wmetrics">
+        <span>ENV FIXES <b>0</b></span>
+        <span>CONCEPT FIXES <b>2</b></span>
+      </div>
+    </div>
+
+    <div class="wcard">
+      <div class="wcard-top">
+        <span class="wnum">05</span>
+        <span class="wtitle">PyTorch</span>
+      </div>
+      <p class="body-text">
+        أول مرة يشتغل نموذج على بيانات حقيقية كبيرة: ٦٠ ألف صورة MNIST، بدقة ٩٧٪.
+        الفرق عن الأسابيع اللي قبل: تفسير قرارات التصميم (ليش Softmax بدل Sigmoid هنا تحديدًا)
+        طلع مستقل، بدون تصحيح.
+      </p>
+      <div class="tags">
+        <span class="tag">Autograd</span><span class="tag">torch.nn</span><span class="tag">MNIST 97%</span>
+      </div>
+      <div class="wmetrics">
+        <span>ENV FIXES <b>1</b></span>
+        <span>CONCEPT FIXES <b>0</b></span>
+      </div>
+    </div>
+
+    <div class="wcard">
+      <div class="wcard-top">
+        <span class="wnum">06</span>
+        <span class="wtitle">Convolutional Neural Networks (CNN)</span>
+      </div>
+      <p class="body-text">
+        أول CNN حقيقي، وربطناه مباشرة بفلاتر OpenCV من الأسبوع الثاني — نفس الرياضيات، بس الفلتر
+        هذي المرة يتعلم نفسه. تفوّق فعليًا على الشبكة كاملة الاتصال من الأسبوع الماضي: 98.29٪ مقابل 97.05٪.
+      </p>
+      <div class="tags">
+        <span class="tag">Conv2D</span><span class="tag">Padding</span><span class="tag">Max Pooling</span>
+      </div>
+      <div class="wmetrics">
+        <span>ENV FIXES <b>0</b></span>
+        <span>CONCEPT FIXES <b>2</b></span>
+      </div>
+    </div>
+
+    <div class="wcard">
+      <div class="wcard-top">
+        <span class="wnum">07</span>
+        <span class="wtitle">تحسين النموذج — Overfitting, Dropout, BatchNorm</span>
+      </div>
+      <p class="body-text">
+        آخر أسبوع بمرحلة التعلّم العميق. تعلمنا نفرّق بين "الشبكة تحفظ" و"الشبكة تفهم" عبر مراقبة
+        Train مقابل Test Loss. تقنيًا أصعب أسبوع من ناحية تنفيذ الكود — سلسلة أعطال طويلة (كود ناقص،
+        أخطاء إزاحة) أطالت الجلسة، بدون علاقة بضعف بالفهم نفسه.
+      </p>
+      <div class="tags">
+        <span class="tag">Overfitting</span><span class="tag">Dropout</span><span class="tag">BatchNorm</span>
+      </div>
+      <div class="wmetrics">
+        <span>ENV FIXES <b>6</b></span>
+        <span>CONCEPT FIXES <b>1</b></span>
+      </div>
+    </div>
+
+    <div class="wcard">
+      <div class="wcard-top">
+        <span class="wnum">08-09</span>
+        <span class="wtitle">Transfer Learning و Fine-tuning</span>
+      </div>
+      <p class="body-text">
+        أول أسبوع بمرحلة "تطبيقات CV حقيقية". بدل تدريب شبكة من الصفر، استخدمنا ResNet18 مُدرَّبة
+        على ImageNet وكيّفناها لمهمة جديدة (نمل/نحل). Fine-tuning تفوّق من أول epoch: 94.12٪ مقابل 81٪
+        للطريقة البسيطة.
+      </p>
+      <div class="tags">
+        <span class="tag">ResNet18</span><span class="tag">Freezing</span><span class="tag">Differential LR</span>
+      </div>
+      <div class="wmetrics">
+        <span>ENV FIXES <b>0</b></span>
+        <span>CONCEPT FIXES <b>3</b></span>
+      </div>
+    </div>
+
+    <div class="wcard">
+      <div class="wcard-top">
+        <span class="wnum">10-11</span>
+        <span class="wtitle">Object Detection و YOLO</span>
+      </div>
+      <p class="body-text">
+        الفرق الجوهري عن كل شي قبله: مو بس "وش موجود"، بل "وين بالضبط". IoU، Confidence Score،
+        Non-Max Suppression — ثلاث أدوات مترابطة، وأي لخبطة بواحدة تنتقل للتالية. طُبّقت فعليًا
+        على صور حقيقية بنتائج كشف واضحة.
+      </p>
+      <div class="tags">
+        <span class="tag">IoU</span><span class="tag">YOLOv8n</span><span class="tag">NMS</span>
+      </div>
+      <div class="wmetrics">
+        <span>ENV FIXES <b>1</b></span>
+        <span>CONCEPT FIXES <b>3</b></span>
+      </div>
+    </div>
+
+    <div class="wcard">
+      <div class="wcard-top">
+        <span class="wnum">12</span>
+        <span class="wtitle">Image Segmentation — U-Net</span>
+      </div>
+      <p class="body-text">
+        أعلى مستوى دقة ممكن: تصنيف كل بكسل لحاله، مو صندوق تقريبي. بنية U-Net (Encoder-Decoder
+        متماثل) وSkip Connections لاسترجاع تفاصيل ضاعت أثناء الضغط. يقفل هذا مرحلة "تطبيقات CV
+        حقيقية" بالكامل.
+      </p>
+      <div class="tags">
+        <span class="tag">U-Net</span><span class="tag">Encoder/Decoder</span><span class="tag">Skip Connections</span>
+      </div>
+      <div class="wmetrics">
+        <span>ENV FIXES <b>0</b></span>
+        <span>CONCEPT FIXES <b>1</b></span>
+      </div>
+    </div>
+
+    <div class="wcard">
+      <div class="wcard-top">
+        <span class="wnum">13-14</span>
+        <span class="wtitle">مشروع End-to-End — كشف عيوب سطحية بالصلب</span>
+      </div>
+      <p class="body-text">
+        أول مشروع كامل من بيانات حقيقية إلى نموذج مُدرَّب على GPU. تحويل صيغ (VOC→YOLO)، حل مشاكل
+        بنيوية بمجلدات لا تظهر كخطأ واضح، والانتقال لـ Colab بعد فشل التدريب المحلي. الأهم: اختبار
+        النموذج على 4 صور واقعية كشف مشكلة حقيقية — Domain Shift — بدل نتيجة مصطنعة مثالية.
+      </p>
+      <div class="tags">
+        <span class="tag">YOLOv8 Training</span><span class="tag">Google Colab</span><span class="tag">Domain Shift</span>
+      </div>
+      <div class="wmetrics">
+        <span>ENV FIXES <b>7</b></span>
+        <span>CONCEPT FIXES <b>1</b></span>
+      </div>
+    </div>
+
+    <div class="wcard">
+      <div class="wcard-top">
+        <span class="wnum">15</span>
+        <span class="wtitle">مسابقة Kaggle — Dogs vs Cats Redux</span>
+      </div>
+      <p class="body-text">
+        أول تجربة تنافسية حقيقية: تدريب، توليد submission.csv بصيغة دقيقة، ورفع فعلي للـLeaderboard.
+        نتيجة نهائية: Log Loss = 0.09247، متطابقة تمامًا بين Public وPrivate — دليل عملي على غياب
+        Leaderboard Overfitting. الطريق لهذي النتيجة كان مليء بأعطال Colab/Drive حقيقية.
+      </p>
+      <div class="tags">
+        <span class="tag">Kaggle</span><span class="tag">Log Loss</span><span class="tag">Google Drive</span>
+      </div>
+      <div class="wmetrics">
+        <span>ENV FIXES <b>8</b></span>
+        <span>CONCEPT FIXES <b>0</b></span>
+      </div>
+    </div>
+
+    <div class="wcard">
+      <div class="wcard-top">
+        <span class="wnum">16</span>
+        <span class="wtitle">المحفظة والتوظيف</span>
+      </div>
+      <p class="body-text">
+        آخر أسبوع — تحويل 15 أسبوع من العمل الفعلي لشي يقنع صاحب عمل خلال ثوانٍ: GitHub Profile،
+        صياغة توظيفية بصيغة [فعل + تقنية + رقم]. أوضح درس هنا: خلط متكرر بين Accuracy وLog Loss عند
+        محاولة إبراز النتائج — دقة المصطلحات أهم من قوة الصياغة.
+      </p>
+      <div class="tags">
+        <span class="tag">GitHub Profile</span><span class="tag">LinkedIn</span><span class="tag">Portfolio</span>
+      </div>
+      <div class="wmetrics">
+        <span>ENV FIXES <b>1</b></span>
+        <span>CONCEPT FIXES <b>2</b></span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="closing">
+  <div class="closing-inner">
+    <p>
+      الخط العام واضح لو تشوف الأرقام سوا: مشاكل بيئة العمل كانت الحاجز الأكبر بالأسبوعين الأولين،
+      اختفت شبه كليًا من الأسبوع الثالث، ثم عادت تظهر بقوة بس عند دخول أدوات جديدة كليًا بنهاية
+      المسار (Colab، Kaggle، Google Drive) — نمط طبيعي لتعلّم أدوات جديدة، مو تراجع بالمستوى.
+      المفاهيم أخذت مسار مختلف: ارتفعت صعوبتها الظاهرية بالأسبوع الثاني، ثم تحسّنت باستمرار حتى
+      وصلت لتفسيرات مستقلة دون تصحيح بمعظم الأسابيع الأخيرة — أوضح دليل على هذا النضج: اكتشاف
+      مشكلة Domain Shift بالأسبوع 13-14 بشكل شبه مستقل، من ملاحظة نتيجة فعلية لا من تلقين.
+    </p>
+    <p>
+      المسار مكتمل بالكامل الآن — 16 أسبوعًا، من أول سطر بايثون إلى مشروع End-to-End حقيقي،
+      مسابقة Kaggle منشورة، ومحفظة جاهزة للعرض على أصحاب العمل.
+    </p>
+  </div>
+</div>
+
+</body>
+</html>

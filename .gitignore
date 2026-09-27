@@ -1,0 +1,6 @@
+﻿data/
+**/data/
+runs/
+*.zip
+*.pt
+*.pth
